@@ -24,6 +24,10 @@ app.add_middleware(
 
 pdf_text_chunks: List[str] = []
 
+@app.get("/")
+def home():
+    return {"message": "Hello from pdfChat Server"}
+
 @app.websocket("/ws/chat")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
