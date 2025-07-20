@@ -99,7 +99,7 @@ def answer_question(question: str, chunks: list[str], history: list[dict], summa
     messages.extend(get_valid_history_pairs(history))
     document_context = "\n".join(chunks[:3])
 
-    #print("3 chunks:", document_context)
+    print("3 chunks:", document_context)
 
     user_prompt = f"Here is the document context:\n{document_context}\n\nNow answer this question:\n{question}"
     messages.append({"role": "user", "content": user_prompt})
