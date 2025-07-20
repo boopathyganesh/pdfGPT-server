@@ -48,3 +48,6 @@ whitenoise==6.6.0
 yarl==1.16.0
 zopfli==0.2.2
 fastapi
+uvicorn[standard]
+websockets
+requests
