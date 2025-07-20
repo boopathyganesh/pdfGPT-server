@@ -51,3 +51,4 @@ fastapi
 uvicorn[standard]
 websockets
 requests
+PyMuPDF
