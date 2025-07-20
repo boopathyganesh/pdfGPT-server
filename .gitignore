@@ -3,3 +3,4 @@ qa_engine2.py
 /.idea
 /venv
 /__pycache__
+/ai/__pycache__
