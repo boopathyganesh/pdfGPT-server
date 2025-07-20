@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from qa_engine import answer_question, summarize_history
 from chat_history import ChatManager
 from models import AskRequest
+from fastapi import WebSocket, WebSocketDisconnect
+#from fastapi.responses import HTMLResponse
 from typing import List
 import fitz
 
@@ -21,6 +23,27 @@ app.add_middleware(
 )
 
 pdf_text_chunks: List[str] = []
+
+@app.websocket("/ws/chat")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    await websocket.send_text("Hi! I'm ready to answer your questions based on the uploaded document(s). Ask me anything!")  # welcome
+
+    chat_history = []
+
+    try:
+        while True:
+            data = await websocket.receive_text()
+            question = data.strip()
+
+            answer = answer_question(question, pdf_text_chunks, chat_manager.get_history(), chat_manager.get_summary())
+            chat_manager.add_to_history("user", question)
+            chat_manager.add_to_history("assistant", answer)
+
+            await websocket.send_text(answer)
+
+    except WebSocketDisconnect:
+        print("Client disconnected")
 
 @app.post("/upload")
 async def upload_pdf(files: List[UploadFile] = File(...)):
